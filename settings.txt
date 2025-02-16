@@ -1,0 +1,3 @@
+background=resources/background/red-dark.jpg
+backside=resources/backside/card_black.png
+frontside=resources/frontside/cards.png
