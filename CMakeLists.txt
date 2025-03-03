@@ -1,14 +1,15 @@
 cmake_minimum_required(VERSION 3.10)
-project(Solitaire VERSION 1.0)
+project(Patience VERSION 1.0)
 
 set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_CXX_FLAGS_DEBUG_INIT "-Wall")
 set(CMAKE_CXX_FLAGS_RELEASE_INIT "-Wall")
-
-find_package(SFML 2.6 COMPONENTS graphics window system REQUIRED)
-
+#
+#set(SFML_DIR "/usr/lib/x86_64-linux-gnu/cmake/SFML/")
+#
+find_package(SFML 2.5 COMPONENTS graphics window system REQUIRED)
 
 set(INCLUDES ${PROJECT_SOURCE_DIR}/include)
 include_directories((${INCLUDES}))
