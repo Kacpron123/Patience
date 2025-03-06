@@ -20,10 +20,10 @@ protected:
    /// @brief side of card false mean face-down
    bool _headup;
 public:
-   Card(int rank,int suit,bool headup=false);
+   Card(int rank,int suit,bool headup=true);
    ~Card()=default;
    /// @brief reverse side of card
-   void Reverse();
+   void reverse();
    /// @brief operator for checking if i can grap pile depends of level::difficulty
    bool operator<(const Card& other) const;
    /// @brief operator for checking if i can place one on another

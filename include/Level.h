@@ -3,12 +3,21 @@
 
 #include <memory>
 #include <string>
-
-#include "Tableau.h"
-#include "Stock.h"
+#include "Depot.h"
 class Level{
 private:
-    std::string(_levelpath);
+    class selectedPack{
+    private:
+        Depot* sender;
+        int cardNum;
+        /// @brief true if the card is to be sent to the mouse
+        bool toMouse;
+    public:
+        void draw(sf::RenderTarget &target,sf::RenderStates states) const;
+        friend void select(Depot* receiver, int cardnum);
+        void deselect();
+    };
+    std::string _levelpath;
     /// @brief vector of cards in game
     /// used in drawing and scaling
     std::vector<Card*> _cards;
@@ -19,11 +28,12 @@ public:
     static int _difficulty;
     void loadLevel(std::string &&levelpath);
     void resetLevel();
+    void clean();
     void draw(sf::RenderTarget &target,sf::RenderStates states) const;
     void shuffle();
     void dealCards();
     void scale(float x,float y);
     void levelEvent(sf::Vector2i mousePos);
-    friend class Card;
+    // friend class Card;
 };
 #endif

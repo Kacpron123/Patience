@@ -37,6 +37,10 @@ void Tile::scale(float x,float y){
 void Tile::setSize(float x,float y){
    m_sprite.setScale(x/m_sprite.getLocalBounds().width, y/m_sprite.getLocalBounds().height);
 }
+sf::Vector2u Tile::getSize() const{
+   sf::FloatRect rect(m_sprite.getGlobalBounds());
+   return sf::Vector2u(rect.width,rect.height);
+}
 void Tile::setScale(float x,float y){
    m_sprite.setScale(x,y);
 }

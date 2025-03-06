@@ -5,6 +5,8 @@
 sf::Texture Card::m_frontside;
 sf::Texture Card::m_backside;
 Card::Card(int rank, int suit,bool headup): _rank(static_cast<Card::Rank>(rank)), _suit(static_cast<Card::Suit>(suit)),_headup(headup),Tile("",{135,189}){
+   if(rank<0||rank>12||suit<0||suit>3)
+      throw std::invalid_argument("Card must have rank between 0 and 12 and suit between 0 and 3");
    //laodTexture();
    //if(headup){
    //   m_sprite.setTexture(m_frontside);
@@ -26,34 +28,37 @@ Card::Card(int rank, int suit,bool headup): _rank(static_cast<Card::Rank>(rank))
 
 Card::Rank Card::getRank() const{return _rank;}
 Card::Suit Card::getSuit() const{return _suit;}
-
+#include <iostream>
 bool Card::operator<(const Card& other) const{
+   if(_rank-other._rank!=1)
+      return false;
    switch(Level::_difficulty){
       case 1:
-      return this->_rank<other._rank;
-      break;
-      case 2:
-      return this->_suit%2==other._suit%2 && this->_rank<other._rank;
-      break;
-      case 3:
-      return this->_suit%2!=other._suit%2 && this->_rank<other._rank;
-      break;
-      case 4:
-      return this->_suit==other._suit && this->_rank<other._rank;
-      break;
+         return true;
+         break;
+         case 2:
+         return _suit%2==other._suit%2;
+         break;
+         case 3:
+         return _suit%2!=other._suit%2;
+         break;
+         case 4:
+         return _suit==other._suit;
+         break;
+      }
+      return false;
    }
-   return 0;
+   bool Card::operator>(const Card &other) const{
+   if(_rank-other._rank==1)
+      return true;
+   return false;
 }
-bool Card::operator>(const Card &other) const{
-   return this->_rank>other._rank;
-}
-void Card::Reverse(){
+void Card::reverse(){
+   sf::Vector2f currentsize=getSize();
    _headup^=1;
    setTexture((_headup) ? m_frontside : m_backside);
    updateTexture();
-   if(_headup)
-      setRect(m_cardrect);  
-   setSize(135,185);
+   setSize(currentsize.x,currentsize.y);
 }
 
 void Card::updateTexture(bool resetRect){
@@ -65,7 +70,8 @@ void Card::updateTexture(bool resetRect){
    int height=texturesize.y/4;
    m_cardrect=sf::IntRect( width*_rank , height*_suit , width , height );
    setTexture((_headup) ? m_frontside : m_backside);
-   
+   if(_headup)
+      setRect(m_cardrect);
 }
 void Card::loadTexture(){
    m_frontside.loadFromFile(MenuOptions::m_frontside);
