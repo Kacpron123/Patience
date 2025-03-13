@@ -69,10 +69,17 @@ Card& Depot::operator[](int j) const{
       throw std::out_of_range("Depot::operator[]: index out of range");
    return *_pile[j];
 }
+void Depot::createDepot(std::vector<std::unique_ptr<Card>> &pack){
+   Depot::fillDepot(pack);
+}   
 void Depot::piletopile(Depot *sender,int num,Depot *receiver){
+   for(int i=num;i<sender->size();i++)
+      (*sender)[i].deselect();
+   if(! (*receiver).empty() && !((*sender)[num]>(*receiver)[receiver->size()-1]))
+      return;
+   
+   sender->piletohand();
    std::vector<std::unique_ptr<Card>> pack(std::make_move_iterator(sender->_pile.begin()+num),std::make_move_iterator(sender->_pile.end()));
-   for(auto &card : pack)
-      card->deselect();
    sender->_pile.erase(sender->_pile.begin() + num, sender->_pile.end());
    sender->update();
    receiver->fillDepot(pack);

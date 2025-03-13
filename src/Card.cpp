@@ -44,9 +44,23 @@ bool Card::operator<<(const Card& other) const{
       }
       return false;
    }
-   bool Card::operator<(const Card &other) const{
-   if(_rank-other._rank==1)
-      return true;
+bool Card::operator<(const Card &other) const{
+   if(_rank-other._rank!=1)
+      return false;
+   switch(Level::m_placingtype){
+      case 1:
+         return true;
+         break;
+      case 2:
+         return _suit%2==other._suit%2;
+         break;
+      case 3:
+         return _suit%2!=other._suit%2;
+         break;
+      case 4:
+         return _suit==other._suit;
+         break;
+      }
    return false;
 }
 void Card::reverse(){

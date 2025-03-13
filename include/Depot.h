@@ -9,10 +9,6 @@
 #include <iostream>
 class Depot{
 private:
-    /// @brief what happened after cards are moved from sender
-    virtual void piletohand(){return;}
-    /// @brief what happened after cards are moved to receiver
-    virtual void handtopile(){return;}
 protected:
     /// @brief position of depot
     sf::Vector2f _position;
@@ -40,12 +36,19 @@ public:
     /// @return -2 if not, -1 if clicked at empty depot in override, and 1+ which Card
     virtual int clicked(sf::Vector2i &mousePos) const;
     bool correctPack(int num) const;
-    virtual void fillDepot(std::vector<std::unique_ptr<Card>> &pack);
+    void fillDepot(std::vector<std::unique_ptr<Card>> &pack);
+    virtual void createDepot(std::vector<std::unique_ptr<Card>> &pack);
     inline bool empty() const{return _pile.empty();}
     inline size_t size() const{return _pile.size();}
     // virtual void place_pack(std::vector<std::unique_ptr<Card>> &pack);
     //virtual void remove_pack(std::vector<std::unique_ptr<Card>> &pack);
     //virtual void move_pack(Depot* receiver);
+    
+    /// @brief what happened after cards are moved from sender
+    virtual void piletohand(){return;}
+    
+    /// @brief what happened after cards are moved to receiver
+    virtual void handtopile(){return;}
 
     static void piletopile(Depot* sender, int num, Depot* receiver); 
     // virtual void piletopile(Depot* receiver, int num);

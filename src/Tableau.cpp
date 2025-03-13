@@ -25,28 +25,21 @@ void Tableau::scale(float x,float y){
    baseTile.scale(x,y);
    Depot::scale(x,y);
 }
+
 void Tableau::piletohand(){
-   // std::vector<std::unique_ptr<Card>> pack;
-   // Hand &hand = Hand::getInstance();
-   // Card &topcard = (*this)[num-1];
-   // if(!topcard.getHeadup())
-   //    topcard.reverse();
-   // if(num < size() ){
-   //    pack.push_back(std::move(_pile[num]));
-   //    num++;
-   // }
    
-   // return pack;
-}
-void Tableau::handtopile(){
+   if(empty()) 
+   return;
    Card &topcard = (*this)[numberofCard()-1];
+   std::cout<<topcard;
+   std::cout<<"hm\n";
    if(!topcard.getHeadup())
       topcard.reverse();
 }
 
-void Tableau::fillDepot(std::vector<std::unique_ptr<Card>> &pack){
-   Depot::fillDepot(pack);
+void Tableau::createDepot(std::vector<std::unique_ptr<Card>> &pack){   
+   fillDepot(pack);
    int n=numberofCard()-1;
-   // for(int i=0;i<n;i++)
-   //    _pile[i]->reverse();
+   for(int i=0;i<n;i++)
+      _pile[i]->reverse();
 }

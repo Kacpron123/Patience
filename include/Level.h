@@ -13,10 +13,14 @@ private:
     /// used in drawing and scaling
     std::vector<Card*> _cards;
     std::vector<std::shared_ptr<Depot>> _depots; 
+    /// @brief which depot can be moved
+    static int m_difficulty;
+    /// @brief which type of card can be placed one on another
+    static int m_placingtype;
 public:
     Level();
     ~Level();
-    static int m_difficulty;
+
     void loadLevel(std::string &&levelpath);
     void resetLevel();
     void cleanLevel();
@@ -25,5 +29,6 @@ public:
     void dealCards();
     void scale(float x,float y);
     void levelEvent(sf::Vector2i mousePos);
+    friend class Card;
 };
 #endif
