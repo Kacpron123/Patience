@@ -6,7 +6,13 @@
 
 #include <vector>
 #include <memory>
+#include <iostream>
 class Depot{
+private:
+    /// @brief what happened after cards are moved from sender
+    virtual void piletohand(){return;}
+    /// @brief what happened after cards are moved to receiver
+    virtual void handtopile(){return;}
 protected:
     /// @brief position of depot
     sf::Vector2f _position;
@@ -14,11 +20,13 @@ protected:
     sf::Vector2f _dposition;
     /// @brief pile of Cards
     std::vector<std::unique_ptr<Card>> _pile;
+    void update();
 public:
     /// @brief pack for containing pack of card, if needed it is placed in place of mouse
     static std::vector<std::unique_ptr<Card>> _pack;
+    Depot():Depot({0,0},{0,0}){};
     Depot(sf::Vector2f position,sf::Vector2f dposition);
-    ~Depot() = default;
+    virtual ~Depot() = default;
     //getters/setters
     void setPosition(float x,float y);
     void setDPosition(float x,float y);
@@ -28,25 +36,34 @@ public:
 
     virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
     virtual void scale(float x,float y);
-    /// @brief update scale/position
-    void update();
     /// @brief check if depot is clicked
-    /// @return -1 if not, 0 if clicked at empty depot in override, and 1+ which Card
+    /// @return -2 if not, -1 if clicked at empty depot in override, and 1+ which Card
     virtual int clicked(sf::Vector2i &mousePos) const;
     bool correctPack(int num) const;
     virtual void fillDepot(std::vector<std::unique_ptr<Card>> &pack);
     inline bool empty() const{return _pile.empty();}
+    inline size_t size() const{return _pile.size();}
     // virtual void place_pack(std::vector<std::unique_ptr<Card>> &pack);
     //virtual void remove_pack(std::vector<std::unique_ptr<Card>> &pack);
     //virtual void move_pack(Depot* receiver);
-    //void piletohand()
-    //hand handtopile()
-    inline Card& operator[](int i){return *_pile[i];}
-    friend class Level;
+
+    static void piletopile(Depot* sender, int num, Depot* receiver); 
+    // virtual void piletopile(Depot* receiver, int num);
+    /// @brief operator for accesing i-element from pile 
+    Card& operator[](int);
+    Card& operator[](int) const;
+    /// @brief accessing for for-each loop 
+    auto begin(){return _pile.begin();}
+    auto begin() const{return _pile.cbegin();}
+    auto end(){return _pile.end();}
+    auto end() const{return _pile.cend();}
+    /// @brief clear pile
+    void clearDepot(){_pile.clear();}
     void deletecard(int num){
         if(num>=0&&num<_pile.size()){
             _pile.erase(_pile.begin()+num);
-        }
+        }else
+            throw std::out_of_range("Depot::deletecard: index out of range");
     update();
     }
 };

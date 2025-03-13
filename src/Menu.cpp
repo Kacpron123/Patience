@@ -67,7 +67,8 @@ void Menu::game_event(){
       if(ev.type == sf::Event::MouseButtonPressed){
          if(ev.mouseButton.button == sf::Mouse::Left){
             sf::Vector2i mousePos = sf::Mouse::getPosition(m_window);
-            level.levelEvent(mousePos);
+            sf::Vector2i mousePos2 = static_cast<sf::Vector2i>(m_window.mapPixelToCoords(mousePos));
+            level.levelEvent(mousePos2);
             
          }
       }

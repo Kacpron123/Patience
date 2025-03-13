@@ -13,10 +13,13 @@ private:
    Tile baseTile;
 public:
    Tableau(sf::Vector2f position,sf::Vector2f size);
-   ~Tableau() = default;
+   ~Tableau() override = default;
    void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
    int clicked(sf::Vector2i &mousePos) const override;
    void scale(float x,float y) override;
    void fillDepot(std::vector<std::unique_ptr<Card>> &pack) override;
+   void piletohand() override;
+   void handtopile() override;
+   
 };
 #endif

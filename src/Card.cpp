@@ -25,14 +25,10 @@ Card::Card(int rank, int suit,bool headup): _rank(static_cast<Card::Rank>(rank))
       setRect(m_cardrect);
    setSize(135,185);
 }
-
-Card::Rank Card::getRank() const{return _rank;}
-Card::Suit Card::getSuit() const{return _suit;}
-#include <iostream>
-bool Card::operator<(const Card& other) const{
+bool Card::operator<<(const Card& other) const{
    if(_rank-other._rank!=1)
       return false;
-   switch(Level::_difficulty){
+   switch(Level::m_difficulty){
       case 1:
          return true;
          break;
@@ -48,7 +44,7 @@ bool Card::operator<(const Card& other) const{
       }
       return false;
    }
-   bool Card::operator>(const Card &other) const{
+   bool Card::operator<(const Card &other) const{
    if(_rank-other._rank==1)
       return true;
    return false;
@@ -76,4 +72,17 @@ void Card::updateTexture(bool resetRect){
 void Card::loadTexture(){
    m_frontside.loadFromFile(MenuOptions::m_frontside);
    m_backside.loadFromFile(MenuOptions::m_backside);
+}
+   
+
+#include <string>
+std::ostream& operator<<(std::ostream& os, const Card& card){
+   std::string suit[4]={"Hearts","Clubs","Diamonds","Spades"};
+   char rank[13]={'A','2','3','4','5','6','7','8','9','T','J','Q','K'};
+
+   os<<suit[card._suit]<<" "<<rank[card._rank];
+   return os;
+}
+void Card::print() const{
+   std::cout<<*this<<std::endl;
 }

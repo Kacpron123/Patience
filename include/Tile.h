@@ -29,5 +29,7 @@ public:
    void setPosition(float x,float y);
    void setScale(float x,float y);
    void scale(float x,float y);
+   virtual void select();
+   void deselect();
 };
 #endif

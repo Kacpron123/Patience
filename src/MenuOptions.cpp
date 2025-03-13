@@ -60,9 +60,11 @@ MenuOptions::MenuOptions(){
    LoadTextures();
    m_options_window.create(800,40);
    m_buttons.push_back(Button(0, 0, 150, 40, "New Game"));
-   m_buttons.push_back(Button(150, 0, 150, 40, "Load Game"));
+   m_buttons.push_back(Button(150, 0, 150, 40, "Restart"));
    m_buttons.push_back(Button(300, 0, 150, 40, "Settings"));
    m_buttons.push_back(Button(450, 0, 150, 40, "Exit"));
+   // hint?
+   // undo?
 }
 void MenuOptions::draw(sf::RenderTarget &target) const{
    // m_options_window.clear();

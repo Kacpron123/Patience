@@ -47,3 +47,11 @@ void Tile::setScale(float x,float y){
 void Tile::setRect(sf::IntRect rect){
    m_sprite.setTextureRect(rect);
 }
+void Tile::select(){
+   m_sprite.setColor(sf::Color(190, 190, 190, 255));  // Cyan with 75% transparency
+
+}
+void Tile::deselect(){
+   m_sprite.setColor(sf::Color(255,255,255,255));  // Reset to original color (no tint) and full opacity
+
+}

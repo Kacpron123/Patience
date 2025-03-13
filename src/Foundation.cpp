@@ -11,12 +11,14 @@ void Foundation::draw(sf::RenderTarget &target,sf::RenderStates states) const{
    if(n>=2)
    _pile.back()->draw(target,states);
    if(n>=1)
-   _pile.end()[-1]->draw(target,states);
+   const_cast<Foundation*>(this)[n-1].draw(target,states);
 }
+#include <iostream>
 int Foundation::clicked(sf::Vector2i &mousePos) const{
    sf::Vector2f rightdowncornerofbase=foundationCard.getPosition()+static_cast<sf::Vector2f>(foundationCard.getSize());
       if(mousePos.x>=foundationCard.getPosition().x && mousePos.x<=rightdowncornerofbase.x  && mousePos.y>=foundationCard.getPosition().y && mousePos.y<=rightdowncornerofbase.y)
-         return !empty();
+         std::cout<<"foundation\n";
+      return -1;
 }
 void Foundation::scale(float x,float y){
    foundationCard.scale(x,y);

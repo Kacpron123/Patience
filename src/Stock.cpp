@@ -12,5 +12,5 @@ void Stock::draw(sf::RenderTarget & target,sf::RenderStates states) const{
    Depot::draw(target,states);
 }
 int Stock::clicked(sf::Vector2i &mousePos) const{
-   return 0;
+   return -1;
 }
