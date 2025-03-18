@@ -16,6 +16,7 @@ public:
    ~Tile() override = default;
    Tile& operator=(const Tile &other); 
    //bool isClicked()
+   bool clicked(sf::Vector2i &MousePos);
    void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
    void setTexture(const std::string &path);
    void setTexture(const sf::Texture &texture);

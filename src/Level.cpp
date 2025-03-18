@@ -84,7 +84,6 @@ void Level::levelEvent(sf::Vector2i mousePos){
         int cardclicked=0;
         if((cardclicked=depot->clicked(mousePos))>=-1){
             if(cardclicked>=0){
-                
                 // std::cout<<"clicked "<<cardclicked<<"\n";
                 if(!hand.isSelected()){
                     if(depot->correctPack(cardclicked) && (*depot)[cardclicked].getHeadup()){
@@ -103,7 +102,7 @@ void Level::levelEvent(sf::Vector2i mousePos){
                     
                 }
                 else{
-                    if(cardclicked==depot->size()-1){
+                    if(cardclicked==depot->size()-1 && hand.getSender()!= depot.get()){
                         std::cout<<"placing\n";
                         // && (*depot)[cardclicked]<hand[0]
                         Depot::piletopile(hand.getSender(),hand.getPlace(),depot.get());
@@ -117,6 +116,7 @@ void Level::levelEvent(sf::Vector2i mousePos){
                 // else
             }
             else if(cardclicked==-1 && hand.isSelected()){
+                // std::cout<<"error\n";
                 Depot::piletopile(hand.getSender(),hand.getPlace(),depot.get());
                 hand.getSender()->piletohand();
             }

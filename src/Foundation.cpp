@@ -16,9 +16,9 @@ void Foundation::draw(sf::RenderTarget &target,sf::RenderStates states) const{
 #include <iostream>
 int Foundation::clicked(sf::Vector2i &mousePos) const{
    sf::Vector2f rightdowncornerofbase=foundationCard.getPosition()+static_cast<sf::Vector2f>(foundationCard.getSize());
-      if(mousePos.x>=foundationCard.getPosition().x && mousePos.x<=rightdowncornerofbase.x  && mousePos.y>=foundationCard.getPosition().y && mousePos.y<=rightdowncornerofbase.y)
-         std::cout<<"foundation\n";
-      return -1;
+   if(mousePos.x>=foundationCard.getPosition().x && mousePos.x<=rightdowncornerofbase.x  && mousePos.y>=foundationCard.getPosition().y && mousePos.y<=rightdowncornerofbase.y)
+      std::cout<<"foundation\n";
+   return -2;
 }
 void Foundation::scale(float x,float y){
    foundationCard.scale(x,y);

@@ -11,10 +11,10 @@ void Hand::selectDepot(Depot *depot,int num){
 void Hand::deselectDepot(){
    if(m_sender==nullptr)
       return;
-   // int n=m_sender->size()-m_place;
-   // while(n--){
-   //    (*m_sender)[m_place+n].deselect();
-   //    }
+   int n=m_sender->size()-m_place;
+   while(n--){
+      (*m_sender)[m_place+n].deselect();
+      }
    m_sender=nullptr;
    m_place=0;
 }

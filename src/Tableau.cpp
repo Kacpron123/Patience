@@ -15,8 +15,8 @@ int Tableau::clicked(sf::Vector2i &mousePos) const{
    if(empty()){
       sf::Vector2f rightdowncornerofbase=baseTile.getPosition()+static_cast<sf::Vector2f>(baseTile.getSize());
       if(mousePos.x>=baseTile.getPosition().x && mousePos.x<=rightdowncornerofbase.x  && mousePos.y>=baseTile.getPosition().y && mousePos.y<=rightdowncornerofbase.y)
-         std::cout<<"-1\n";
          return -1;
+      return -2;
    }
    else
    return Depot::clicked(mousePos);
