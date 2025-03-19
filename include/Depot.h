@@ -34,7 +34,7 @@ public:
     virtual void scale(float x,float y);
     /// @brief check if depot is clicked
     /// @return -2 if not, -1 if clicked at empty depot in override, and 1+ which Card
-    virtual int clicked(sf::Vector2i &mousePos) const;
+    virtual int clicked(const sf::Vector2i &mousePos);
     bool correctPack(int num) const;
     void fillDepot(std::vector<std::unique_ptr<Card>> &pack);
     virtual void createDepot(std::vector<std::unique_ptr<Card>> &pack);
@@ -49,7 +49,7 @@ public:
     
     /// @brief what happened after cards are moved to receiver
     virtual void handtopile(){return;}
-
+    //to delete
     static void piletopile(Depot* sender, int num, Depot* receiver); 
     // virtual void piletopile(Depot* receiver, int num);
     /// @brief operator for accesing i-element from pile 

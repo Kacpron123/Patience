@@ -12,7 +12,7 @@ void Tile::draw(sf::RenderTarget &target, sf::RenderStates states) const{
    target.draw(m_sprite, states);
 }
 
-bool Tile::clicked(sf::Vector2i &MousePos){
+bool Tile::clicked(const sf::Vector2i &MousePos){
    sf::Vector2f pos=m_sprite.getPosition();
    sf::FloatRect siz=m_sprite.getGlobalBounds();
    if(MousePos.x>=pos.x && MousePos.x<=pos.x+siz.width &&

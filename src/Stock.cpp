@@ -1,17 +1,71 @@
 #include "Stock.h"
+#include "Hand.h"
 
-Stock::Stock(sf::Vector2f position): Depot(position,{0,0}){
-   // waste.baseTile.setTexture("resources/card_blank.png");
-   // waste.baseTile.setSize(80,120);
-   // waste.baseTile.setPosition(getPosition().x,getPosition().y);
+Stock::Stock(sf::Vector2f position): Depot(position,{0,0}), m_currenttop(0){
+   m_wasteposition={position.x-100,position.y};
+   baseTile.setTexture("resources/card_blank.png");
+   baseTile.setSize(80,120);
+   baseTile.setPosition(getPosition().x,getPosition().y);
 }
-
+void Stock::createDepot(std::vector<std::unique_ptr<Card>> &pack){
+   Depot::fillDepot(pack);
+   m_currenttop=numberofCard()-1;
+   for(int i=0;i<m_currenttop;i++)
+      _pile[i]->reverse();
+   _pile[m_currenttop]->setPosition(m_wasteposition.x,m_wasteposition.y);
+   
+}
 void Stock::draw(sf::RenderTarget & target,sf::RenderStates states) const{
-   // waste.baseTile.draw(target,states);
+   baseTile.draw(target,states);
    Depot::draw(target,states);
 }
-
-int Stock::clicked(sf::Vector2i &mousePos) const{
-   // return (waste.basteTile.)
+int Stock::clicked(const sf::Vector2i &mousePos){
+   for(int i=0;i<size();i++)
+      std::cout<<*_pile[i]<<std::endl;
+   std::cout<<"--------\n";
+   if(!empty()){
+      sf::Vector2f rightdowncornerofbase=_pile[0]->getSize();
+      if(mousePos.x>=m_wasteposition.x && mousePos.x<=m_wasteposition.x+rightdowncornerofbase.x  && mousePos.y>=m_wasteposition.y && mousePos.y<=m_wasteposition.y+rightdowncornerofbase.y)
+         {
+            std::cout<<"clicked card"<<*_pile[size()-1]<<"curr"<<m_currenttop<<"\n";
+            return size()-1;
+         }   
+      if(mousePos.x>=_position.x && mousePos.x<=_position.x+rightdowncornerofbase.x  && mousePos.y>=_position.y && mousePos.y<=_position.y+rightdowncornerofbase.y)
+         {
+            rotate();
+            std::cout<<"rotate"<<m_currenttop<<"\n";
+            return -2;
+         }// return -1;
+   }
    return -2;
+}
+void Stock::rotate(){
+   if(m_currenttop>0){
+      // std::swap(_pile[0],_pile[m_currenttop]);
+      for(int i=size()-1;i>0;i--)
+         std::swap(_pile[i],_pile[i-1]);
+      m_currenttop--;
+      _pile[size()-1]->reverse();
+      _pile[size()-1]->setPosition(m_wasteposition.x,m_wasteposition.y);
+      std::cout<<"top card: "<<*_pile[size()-1]<<"\n";
+   }
+   else{
+      // m_currenttop=size()-1;
+      // for(int i=0;i<size()/2;i++){
+      //    std::swap(_pile[i],_pile[m_currenttop-i]);
+      //    _pile[i]->reverse();
+      //    _pile[m_currenttop-i]->reverse();
+      //    _pile[i]->setPosition(_position.x,_position.y);
+      //    _pile[m_currenttop-i]->setPosition(_position.x,_position.y);
+      // }
+      // _pile[m_currenttop]->reverse();
+      // _pile[m_currenttop]->setPosition(m_wasteposition.x,m_wasteposition.y);
+   }
+}
+void Stock::piletohand(){
+   Hand::getInstance().selectDepot(this,size()-1);
+}
+void Stock::handtopile(){
+   Hand::getInstance().deselectDepot();
+   return;
 }

@@ -16,7 +16,7 @@ void Depot::draw(sf::RenderTarget &target, sf::RenderStates states) const{
    for(const auto &card : _pile)
       card->draw(target,states);
 }
-int Depot::clicked(sf::Vector2i &mousePos) const{
+int Depot::clicked(const sf::Vector2i &mousePos){
    sf::Vector2f rightdowncorner=_pile.back()->getPosition()+_pile.back()->getSize();
    if(mousePos.x>=_position.x && mousePos.x<=rightdowncorner.x  &&
       mousePos.y>=_position.y && mousePos.y<=rightdowncorner.y){

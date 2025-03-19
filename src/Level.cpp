@@ -45,7 +45,8 @@ void Level::loadLevel(std::string &&levelpath){
     _depots.push_back(std::make_unique<Stock>(sf::Vector2f(660,60)));
     std::vector<std::unique_ptr<Card>> pack(
         std::make_move_iterator(_cards.begin()),
-        std::make_move_iterator(_cards.end()));
+        // std::make_move_iterator(_cards.end())); 
+        std::make_move_iterator(_cards.begin()+4));//for smaller Stock, experimenting
         _cards.clear();
         _depots.back()->createDepot(pack);
     for(int i=0;i<4;i++){
@@ -90,6 +91,7 @@ void Level::levelEvent(sf::Vector2i mousePos){
                         // std::cout<<"correct\n";
                         int n=depot->size()-cardclicked;
                         while(n--){
+                            depot->piletohand();
                             hand.selectDepot(depot.get(),cardclicked);
                             hand.print();
                             (*depot)[cardclicked+n].select();

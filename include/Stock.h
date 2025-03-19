@@ -6,23 +6,25 @@
 
 #include <vector>
 #include <memory>
+/// class for stock
+/// it is guaranteed that the card to collect is the top card in pile
 class Stock: public Depot{
 protected:
 private:
-/// card to collect
-/// it is guaranteed that the card to collect is the top card in pilec
-class Waste{
-   private:
-   sf::Vector2f _position;
-   public:
-} waste;
+   int m_currenttop;
+   Tile baseTile;
+   sf::Vector2f m_wasteposition;
    /// @brief defining if cards are auto collecting from Tableau 
    bool autocollect();
    // int drawedCard;
+   void rotate();
 public:
    Stock(sf::Vector2f position);
    void draw(sf::RenderTarget &target, sf::RenderStates) const override;
-   int clicked(sf::Vector2i &mousePos) const override;
-   void rotate();
+   int clicked(const sf::Vector2i &mousePos) override;
+   // int clicked(const sf::Vector2i &mousePos);
+   void createDepot(std::vector<std::unique_ptr<Card>> &pack) override;
+   void handtopile() override;
+   void piletohand() override;
 };
 #endif

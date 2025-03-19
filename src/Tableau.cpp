@@ -11,7 +11,7 @@ void Tableau::draw(sf::RenderTarget &target, sf::RenderStates states) const{
    Depot::draw(target,states);
 }
 #include <iostream>
-int Tableau::clicked(sf::Vector2i &mousePos) const{
+int Tableau::clicked(const sf::Vector2i &mousePos){
    if(empty()){
       sf::Vector2f rightdowncornerofbase=baseTile.getPosition()+static_cast<sf::Vector2f>(baseTile.getSize());
       if(mousePos.x>=baseTile.getPosition().x && mousePos.x<=rightdowncornerofbase.x  && mousePos.y>=baseTile.getPosition().y && mousePos.y<=rightdowncornerofbase.y)
