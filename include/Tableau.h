@@ -18,8 +18,8 @@ public:
    int clicked(const sf::Vector2i &mousePos) override;
    void scale(float x,float y) override;
    void piletohand() override;
-   // void handtopile() override;
-   void createDepot(std::vector<std::unique_ptr<Card>> &pack) override; 
+   void handtopile() override;
+   void createDepot(std::vector<std::unique_ptr<Card>> &pack) override;
    
 };
 #endif

@@ -17,6 +17,10 @@ protected:
     /// @brief pile of Cards
     std::vector<std::unique_ptr<Card>> _pile;
     void update();
+    /// @brief what happened after cards are moved from sender
+    virtual void piletohand() = 0;
+    /// @brief what happened after cards are moved to receiver
+    virtual void handtopile() = 0;
 public:
     /// @brief pack for containing pack of card, if needed it is placed in place of mouse
     static std::vector<std::unique_ptr<Card>> _pack;
@@ -44,11 +48,6 @@ public:
     //virtual void remove_pack(std::vector<std::unique_ptr<Card>> &pack);
     //virtual void move_pack(Depot* receiver);
     
-    /// @brief what happened after cards are moved from sender
-    virtual void piletohand(){return;}
-    
-    /// @brief what happened after cards are moved to receiver
-    virtual void handtopile(){return;}
     //to delete
     static void piletopile(Depot* sender, int num, Depot* receiver); 
     // virtual void piletopile(Depot* receiver, int num);
