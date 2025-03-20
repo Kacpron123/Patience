@@ -24,7 +24,7 @@ public:
    int clicked(const sf::Vector2i &mousePos) override;
    // int clicked(const sf::Vector2i &mousePos);
    void createDepot(std::vector<std::unique_ptr<Card>> &pack) override;
-   void handtopile() override;
    void piletohand() override;
+   void handtopile() override;
 };
 #endif
