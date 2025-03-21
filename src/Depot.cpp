@@ -53,9 +53,13 @@ void Depot::scale(float x,float y){
 }
 void Depot::fillDepot(std::vector<std::unique_ptr<Card>> &pack){
    _pile.reserve(_pile.size()+pack.size());
-   for(auto &card : pack)
+   int i=size();
+   for(auto &card : pack){
       _pile.push_back(std::move(card));
-   update();
+      _pile.back()->setPosition(_position.x+_dposition.x*i,_position.y+_dposition.y*i);
+      i++;
+   }
+   // update();
    pack.clear();
    // std::cout<<"Depot filled"<<std::endl;
 }
@@ -75,18 +79,16 @@ void Depot::createDepot(std::vector<std::unique_ptr<Card>> &pack){
 void Depot::piletopile(Depot *sender,int num,Depot *receiver){
    if(!sender || !receiver)
       return;
-   
    for(int i=num;i<sender->size();i++)
       (*sender)[i].deselect();
-   if((*sender)[num]<(*receiver)[receiver->size()-1])
+   //accepting the move
+   if(!(sender->piletohand() && receiver->handtopile()))
       return;
-   sender->piletohand();
-   if(!Hand::getInstance().getSender())
-      return;
+   // moving
    std::vector<std::unique_ptr<Card>> pack(std::make_move_iterator(sender->_pile.begin()+num),std::make_move_iterator(sender->_pile.end()));
    sender->_pile.erase(sender->_pile.begin() + num, sender->_pile.end());
-   sender->update();
-   receiver->handtopile();
    receiver->fillDepot(pack);
-   receiver->update();
+   //updating
+   sender->updatesender();
+   receiver->updatereceiver();
 }

@@ -16,11 +16,13 @@ protected:
     sf::Vector2f _dposition;
     /// @brief pile of Cards
     std::vector<std::unique_ptr<Card>> _pile;
-    void update();
+    virtual void update();
     /// @brief what happened after cards are moved from sender
-    virtual void piletohand() = 0;
+    virtual bool piletohand() = 0;
     /// @brief what happened after cards are moved to receiver
-    virtual void handtopile() = 0;
+    virtual bool handtopile() = 0;
+    virtual void updatesender(){};
+    virtual void updatereceiver(){};
 public:
     /// @brief pack for containing pack of card, if needed it is placed in place of mouse
     static std::vector<std::unique_ptr<Card>> _pack;
@@ -32,7 +34,6 @@ public:
     void setDPosition(float x,float y);
     inline sf::Vector2f getDPosition() const{return _dposition;}
     inline sf::Vector2f getPosition() const{return _position;}
-    inline int numberofCard() const{return _pile.size();}
 
     virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
     virtual void scale(float x,float y);

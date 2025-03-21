@@ -27,19 +27,38 @@ void Tableau::scale(float x,float y){
 }
 void Tableau::createDepot(std::vector<std::unique_ptr<Card>> &pack){   
    fillDepot(pack);
-   int n=numberofCard()-1;
+   int n=size()-1;
    for(int i=0;i<n;i++)
       _pile[i]->reverse();
 }
-void Tableau::piletohand(){
-   if(empty())
-      return;
-   Card &topcard = (*this)[numberofCard()-1];
+bool Tableau::piletohand(){
+   // if(empty())
+   //    return false;
+   return true;
+   Card &topcard = (*this)[size()-1];
    std::cout<<topcard;
    std::cout<<"hm\n";
    if(!topcard.getHeadup())
       topcard.reverse();
 }
-void handtopile(){
-
+bool Tableau::handtopile(){
+   if(empty()){
+      const Card& tophand=Hand::getInstance().getSender()[Hand::getInstance().getPlace()]; 
+      if(tophand.getRank()==Card::King)
+         return true;
+      return false;
+   }
+   if((Hand::getInstance().getSender())[Hand::getInstance().getPlace()]>(*this)[size()-1])
+      return true;
+   return false;
+}
+void Tableau::updatereceiver(){
+   // TODO : update receiver, add resize     
+}
+void Tableau::updatesender(){
+   if(empty())
+      return;
+   Card &topcard = (*this)[size()-1];
+   if(!topcard.getHeadup())
+      topcard.reverse();
 }

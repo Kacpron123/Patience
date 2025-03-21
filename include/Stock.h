@@ -11,7 +11,7 @@
 class Stock: public Depot{
 protected:
 private:
-   int m_currenttop;
+   int m_bigrotate;
    Tile baseTile;
    sf::Vector2f m_wasteposition;
    /// @brief defining if cards are auto collecting from Tableau 
@@ -24,7 +24,11 @@ public:
    int clicked(const sf::Vector2i &mousePos) override;
    // int clicked(const sf::Vector2i &mousePos);
    void createDepot(std::vector<std::unique_ptr<Card>> &pack) override;
-   void piletohand() override;
-   void handtopile() override;
+   bool piletohand() override;
+   bool handtopile() override;
+   // void update() override{Depot::update();std::cout<<"update stock"<<std::endl;};
+   void updatesender() override;
+   void updatereceiver() override;
+
 };
 #endif
