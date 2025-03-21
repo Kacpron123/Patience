@@ -1,7 +1,7 @@
 #include "Stock.h"
 #include "Hand.h"
 
-Stock::Stock(sf::Vector2f position): Depot(position,{0,0}), m_currenttop(0){
+Stock::Stock(sf::Vector2f position): Depot(position,{0,0}), m_bigrotate(0){
    m_wasteposition={position.x-100,position.y};
    baseTile.setTexture("resources/card_blank.png");
    baseTile.setSize(80,120);
@@ -9,10 +9,12 @@ Stock::Stock(sf::Vector2f position): Depot(position,{0,0}), m_currenttop(0){
 }
 void Stock::createDepot(std::vector<std::unique_ptr<Card>> &pack){
    Depot::fillDepot(pack);
-   m_currenttop=numberofCard()-1;
-   for(int i=0;i<m_currenttop;i++)
+   m_bigrotate=size()-1;
+   for(int i=0;i<size();i++){
       _pile[i]->reverse();
-   _pile[m_currenttop]->setPosition(m_wasteposition.x,m_wasteposition.y);
+
+   }
+   // _pile[m_bigrotate]->setPosition(m_wasteposition.x,m_wasteposition.y);
    
 }
 void Stock::draw(sf::RenderTarget & target,sf::RenderStates states) const{
@@ -20,52 +22,52 @@ void Stock::draw(sf::RenderTarget & target,sf::RenderStates states) const{
    Depot::draw(target,states);
 }
 int Stock::clicked(const sf::Vector2i &mousePos){
-   for(int i=0;i<size();i++)
-      std::cout<<*_pile[i]<<std::endl;
-   std::cout<<"--------\n";
    if(!empty()){
       sf::Vector2f rightdowncornerofbase=_pile[0]->getSize();
       if(mousePos.x>=m_wasteposition.x && mousePos.x<=m_wasteposition.x+rightdowncornerofbase.x  && mousePos.y>=m_wasteposition.y && mousePos.y<=m_wasteposition.y+rightdowncornerofbase.y)
          {
-            std::cout<<"clicked card"<<*_pile[size()-1]<<"curr"<<m_currenttop<<"\n";
+            if(m_bigrotate==size()-1)
+               return -2;
             return size()-1;
          }   
       if(mousePos.x>=_position.x && mousePos.x<=_position.x+rightdowncornerofbase.x  && mousePos.y>=_position.y && mousePos.y<=_position.y+rightdowncornerofbase.y)
          {
             rotate();
-            std::cout<<"rotate"<<m_currenttop<<"\n";
             return -2;
-         }// return -1;
+         }
    }
    return -2;
 }
 void Stock::rotate(){
-   if(m_currenttop>0){
-      // std::swap(_pile[0],_pile[m_currenttop]);
-      for(int i=size()-1;i>0;i--)
-         std::swap(_pile[i],_pile[i-1]);
-      m_currenttop--;
+   if(m_bigrotate>=0){
+      _pile[size()-1]->deselect();
+      for(int i=m_bigrotate;i<size()-1;i++)
+      std::swap(_pile[i],_pile[i+1]);
+      m_bigrotate--;
       _pile[size()-1]->reverse();
       _pile[size()-1]->setPosition(m_wasteposition.x,m_wasteposition.y);
-      std::cout<<"top card: "<<*_pile[size()-1]<<"\n";
    }
    else{
-      // m_currenttop=size()-1;
-      // for(int i=0;i<size()/2;i++){
-      //    std::swap(_pile[i],_pile[m_currenttop-i]);
-      //    _pile[i]->reverse();
-      //    _pile[m_currenttop-i]->reverse();
-      //    _pile[i]->setPosition(_position.x,_position.y);
-      //    _pile[m_currenttop-i]->setPosition(_position.x,_position.y);
-      // }
-      // _pile[m_currenttop]->reverse();
-      // _pile[m_currenttop]->setPosition(m_wasteposition.x,m_wasteposition.y);
+      _pile[size()-1]->deselect();
+      int n=size()-1;
+      for(int i=0;i<=n/2;i++)
+         std::swap(_pile[i],_pile[n-i]);
+      for(auto &card: _pile){
+         card->reverse();
+         card->setPosition(_position.x,_position.y);
+      }
+      m_bigrotate=size()-1;
    }
 }
-void Stock::piletohand(){
-   Hand::getInstance().selectDepot(this,size()-1);
+bool Stock::piletohand(){
+   return true;
 }
-void Stock::handtopile(){
-   Hand::getInstance().deselectDepot();
-   return;
+bool Stock::handtopile(){
+   //stock cannot accept card;
+   return false;
 }
+void Stock::updatesender(){
+   if(m_bigrotate==size())
+      m_bigrotate--;
+}
+void Stock::updatereceiver(){}

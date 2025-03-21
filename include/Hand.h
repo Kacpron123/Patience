@@ -25,9 +25,10 @@ public:
    Hand& operator=(const Hand&) = delete;
    void selectDepot(Depot *depot,int num);
    void deselectDepot();
-   Depot* getSender() {return m_sender;}
+   Depot& getSender() {return *m_sender;}
    int getPlace() {return m_place;}
    bool isSelected() const{return m_sender!=nullptr;}
+   size_t size() const{return m_sender->size()-m_place;}
    void draw(sf::RenderTarget &target,sf::RenderStates states, sf::Vector2i &mousePos) const;
    void print(){
       char rank[13]={'A','2','3','4','5','6','7','8','9','T','J','Q','K'};

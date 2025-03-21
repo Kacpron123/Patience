@@ -13,5 +13,9 @@ public:
    void draw(sf::RenderTarget &target,sf::RenderStates states) const override;
    int clicked(const sf::Vector2i &mousePos) override;
    void scale(float x,float y) override;
+   bool piletohand() override;
+   bool handtopile() override;
+   void updatereceiver() override;
+   void updatesender() override;
 };
 #endif
