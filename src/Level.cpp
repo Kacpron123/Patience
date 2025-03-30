@@ -75,7 +75,6 @@ void Level::cleanLevel(){
 #include <iostream>
 void Level::levelEvent(sf::Vector2i mousePos){
     if(mousePos.x>=0&&mousePos.x<=80&&mousePos.y>=0&&mousePos.y<=80){
-        std::cout<<"reset\n";
         resetLevel();
         return;
     }
