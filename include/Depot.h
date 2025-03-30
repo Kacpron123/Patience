@@ -21,8 +21,8 @@ protected:
     virtual bool piletohand() = 0;
     /// @brief what happened after cards are moved to receiver
     virtual bool handtopile() = 0;
-    virtual void updatesender(){};
-    virtual void updatereceiver(){};
+    virtual void updatesender() = 0;
+    virtual void updatereceiver() = 0;
 public:
     /// @brief pack for containing pack of card, if needed it is placed in place of mouse
     static std::vector<std::unique_ptr<Card>> _pack;
