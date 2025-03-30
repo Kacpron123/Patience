@@ -8,12 +8,16 @@ This is a simple implementation of Solitaire card game using C++ and SFML librar
 * fully customize look of game
 
 ## Compiling
-
+If you don't have installed SFML library first run  
+``` sudo apt install libsfml-dev ```  
+  
+  
 To compile the game, you need to have SFML library installed. Then simply run the following command in the terminal:
 
-mkdir build
-cd build/
-cmake ..
-make
-./Solitaire
-
+```
+mkdir build  
+cd build/  
+cmake ..  
+make  
+./Solitaire  
+```
