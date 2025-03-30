@@ -4,6 +4,7 @@
 #include "SFML/Graphics.hpp"
 #include <string>
 #include <vector>
+#include <functional>
 class MenuOptions{
 private:
 struct Button{
@@ -12,6 +13,7 @@ struct Button{
    Button(float x, float y, float width, float height, const std::string& label);
    bool isClicked(sf::Vector2f mousePos) const;
    void updateHover(sf::Vector2f mousePos);
+   std::function<void()> onClick = nullptr;
 };
 /**
  *  new game
