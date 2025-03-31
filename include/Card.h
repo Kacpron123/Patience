@@ -31,13 +31,14 @@ public:
    /// @brief operator for checking if i can place one on another
    // the same as operator<() difficulty=1
    bool operator<(const Card &other) const;
-   inline bool operator>(const Card& other) const{return other<<(*this);}
+   inline bool operator>(const Card& other) const{return other<(*this);}
    
    /// @brief opeartor for printing
    friend std::ostream& operator<<(std::ostream& os, const Card& card);
    void print() const;
 
    void updateTexture(bool resetRect=true);
+   /// @brief load front and back textures
    static void loadTexture();
    /// @brief getters 
    inline Rank getRank() const{return _rank;}

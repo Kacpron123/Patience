@@ -16,6 +16,7 @@ struct Button{
    std::function<void()> onClick = nullptr;
 };
 /**
+ *  TODO: buttons
  *  new game
  *  restart game
  *  difficulty? {rather new game->select game with diccipulty}
@@ -34,8 +35,8 @@ public:
    static std::string m_backside;
    static std::string m_frontside;
    static std::string m_background;
-   static bool _Pause;
-   static int _Volume;
+   static bool m_Pause;
+   static int m_Volume;
    static sf::Font m_font;
    static void LoadTextures();
    sf::RenderTexture m_options_window{};

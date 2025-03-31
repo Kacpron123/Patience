@@ -9,24 +9,30 @@ private:
    sf::Texture m_texture{};
    sf::Sprite m_sprite{};
 public:
+   /// @brief default constructor
    Tile() = default;
    Tile(const std::string &path);
    Tile(const Tile &other,sf::Vector2u size);
    Tile(const std::string &path,sf::Vector2u size);
    ~Tile() override = default;
    Tile& operator=(const Tile &other); 
-   //bool isClicked()
+   /// @brief check if tile is clicked
    bool clicked(const sf::Vector2i &MousePos);
+   /// @brief draw tile
    void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
+   /// @brief  set texture
    void setTexture(const std::string &path);
+   /// @brief  set texture
    void setTexture(const sf::Texture &texture);
+   /// @brief get position 
    inline sf::Vector2f getPosition() const{return m_sprite.getPosition();}
-   inline sf::Vector2f getSize() {
-      sf::FloatRect rect(m_sprite.getGlobalBounds());
-      return sf::Vector2f(rect.width,rect.height);}
+   /// @brief get size of tile 
+   sf::Vector2f getSize() const;
+   /// @brief set FloatRect
    void setRect(sf::IntRect rect);
+   /// @brief set size
    void setSize(float x,float y);
-   sf::Vector2u getSize() const;
+   /// @brief set size
    void setPosition(float x,float y);
    void setScale(float x,float y);
    void scale(float x,float y);

@@ -87,13 +87,9 @@ void Card::loadTexture(){
    m_frontside.loadFromFile(MenuOptions::m_frontside);
    m_backside.loadFromFile(MenuOptions::m_backside);
 }
-   
-
-#include <string>
 std::ostream& operator<<(std::ostream& os, const Card& card){
    std::string suit[4]={"Hearts","Clubs","Diamonds","Spades"};
    char rank[13]={'A','2','3','4','5','6','7','8','9','T','J','Q','K'};
-
    os<<suit[card._suit]<<" "<<rank[card._rank];
    return os;
 }

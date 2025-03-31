@@ -11,9 +11,9 @@ class Depot{
 private:
 protected:
     /// @brief position of depot
-    sf::Vector2f _position;
+    sf::Vector2f m_position;
     /// @brief diffrences between Card
-    sf::Vector2f _dposition;
+    sf::Vector2f m_dposition;
     /// @brief pile of Cards
     std::vector<std::unique_ptr<Card>> _pile;
     virtual void update();
@@ -32,8 +32,8 @@ public:
     //getters/setters
     void setPosition(float x,float y);
     void setDPosition(float x,float y);
-    inline sf::Vector2f getDPosition() const{return _dposition;}
-    inline sf::Vector2f getPosition() const{return _position;}
+    inline sf::Vector2f getDPosition() const{return m_dposition;}
+    inline sf::Vector2f getPosition() const{return m_position;}
 
     virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
     virtual void scale(float x,float y);

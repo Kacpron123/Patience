@@ -15,15 +15,20 @@
 class Menu: public MenuOptions{
 private:
    Level level;
+   /// @brief window
    sf::RenderWindow m_window{};
+   /// @brief app icon
    sf::Image m_app_icon{};
+   /// @brief background texture
    Tile m_background{};
-   std::vector<std::unique_ptr<Card>> to_draw;
 public:
    Menu();
    ~Menu()=default;
+   /// @brief main game loop
    void game_event();
+   /// @brief menu
    void draw();
+   /// @brief main loop
    int start();
 };
 #endif

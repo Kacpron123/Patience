@@ -2,15 +2,15 @@
 #include "Card.h"
 #include "Hand.h"
 
-Depot::Depot(sf::Vector2f position,sf::Vector2f dposition):_position(position),_dposition(dposition){}
+Depot::Depot(sf::Vector2f position,sf::Vector2f dposition):m_position(position),m_dposition(dposition){}
 
 void Depot::setPosition(float x,float y){
-   _position.x=x;
-   _position.y=y;
+   m_position.x=x;
+   m_position.y=y;
 }
 void Depot::setDPosition(float x,float y){
-   _dposition.x=x;
-   _dposition.y=y;
+   m_dposition.x=x;
+   m_dposition.y=y;
 }
 void Depot::draw(sf::RenderTarget &target, sf::RenderStates states) const{
    for(const auto &card : _pile)
@@ -18,10 +18,10 @@ void Depot::draw(sf::RenderTarget &target, sf::RenderStates states) const{
 }
 int Depot::clicked(const sf::Vector2i &mousePos){
    sf::Vector2f rightdowncorner=_pile.back()->getPosition()+_pile.back()->getSize();
-   if(mousePos.x>=_position.x && mousePos.x<=rightdowncorner.x  &&
-      mousePos.y>=_position.y && mousePos.y<=rightdowncorner.y){
-         float absmouseposy=mousePos.y-_position.y;
-      int res=absmouseposy/_dposition.y;
+   if(mousePos.x>=m_position.x && mousePos.x<=rightdowncorner.x  &&
+      mousePos.y>=m_position.y && mousePos.y<=rightdowncorner.y){
+         float absmouseposy=mousePos.y-m_position.y;
+      int res=absmouseposy/m_dposition.y;
       res=(res>=_pile.size()) ? _pile.size() : res+1;
       return res-1;
    }
@@ -41,13 +41,13 @@ bool Depot::correctPack(int num) const{
 void Depot::update(){
    int i=0;
    for(auto &card : _pile){
-      card->setPosition(_position.x+_dposition.x*i,_position.y+_dposition.y*i);
+      card->setPosition(m_position.x+m_dposition.x*i,m_position.y+m_dposition.y*i);
       i++;
    }
 }
 void Depot::scale(float x,float y){
-   _dposition.x*=x;
-   _dposition.y*=y;
+   m_dposition.x*=x;
+   m_dposition.y*=y;
    for(auto &card : _pile)
    card->scale(x,y);
 }
@@ -56,7 +56,7 @@ void Depot::fillDepot(std::vector<std::unique_ptr<Card>> &pack){
    int i=size();
    for(auto &card : pack){
       _pile.push_back(std::move(card));
-      _pile.back()->setPosition(_position.x+_dposition.x*i,_position.y+_dposition.y*i);
+      _pile.back()->setPosition(m_position.x+m_dposition.x*i,m_position.y+m_dposition.y*i);
       i++;
    }
    // update();

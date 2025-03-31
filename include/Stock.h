@@ -12,10 +12,10 @@ class Stock: public Depot{
 protected:
 private:
    int m_bigrotate;
-   Tile baseTile;
+   Tile m_baseTile;
    sf::Vector2f m_wasteposition;
    /// @brief defining if cards are auto collecting from Tableau 
-   bool autocollect();
+   bool m_autocollect();
    // int drawedCard;
    void rotate();
 public:

@@ -3,9 +3,9 @@
 
 Stock::Stock(sf::Vector2f position): Depot(position,{0,0}), m_bigrotate(0){
    m_wasteposition={position.x-100,position.y};
-   baseTile.setTexture("resources/card_blank.png");
-   baseTile.setSize(80,120);
-   baseTile.setPosition(getPosition().x,getPosition().y);
+   m_baseTile.setTexture("resources/card_blank.png");
+   m_baseTile.setSize(80,120);
+   m_baseTile.setPosition(getPosition().x,getPosition().y);
 }
 void Stock::createDepot(std::vector<std::unique_ptr<Card>> &pack){
    Depot::fillDepot(pack);
@@ -18,7 +18,7 @@ void Stock::createDepot(std::vector<std::unique_ptr<Card>> &pack){
    
 }
 void Stock::draw(sf::RenderTarget & target,sf::RenderStates states) const{
-   baseTile.draw(target,states);
+   m_baseTile.draw(target,states);
    Depot::draw(target,states);
 }
 int Stock::clicked(const sf::Vector2i &mousePos){
@@ -30,7 +30,7 @@ int Stock::clicked(const sf::Vector2i &mousePos){
                return -2;
             return size()-1;
          }   
-      if(mousePos.x>=_position.x && mousePos.x<=_position.x+rightdowncornerofbase.x  && mousePos.y>=_position.y && mousePos.y<=_position.y+rightdowncornerofbase.y)
+      if(mousePos.x>=m_position.x && mousePos.x<=m_position.x+rightdowncornerofbase.x  && mousePos.y>=m_position.y && mousePos.y<=m_position.y+rightdowncornerofbase.y)
          {
             rotate();
             return -2;
@@ -54,7 +54,7 @@ void Stock::rotate(){
          std::swap(_pile[i],_pile[n-i]);
       for(auto &card: _pile){
          card->reverse();
-         card->setPosition(_position.x,_position.y);
+         card->setPosition(m_position.x,m_position.y);
       }
       m_bigrotate=size()-1;
    }

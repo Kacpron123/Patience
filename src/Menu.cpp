@@ -28,10 +28,6 @@ Menu::Menu(){
 }
 
 int Menu::start(){
-   // to_draw.push_back(std::make_unique<Card>(Card::Nine, Card::Hearts,true));
-   // to_draw.back()->setPosition(500, 150);
-   // to_draw.push_back(std::make_unique<Card>(Card::Rank::Jack, Card::Hearts));
-   // to_draw.back()->setPosition(100, 100);
    level.loadLevel("level/Klondike");
    MenuOptions options;
    while(m_window.isOpen()){
@@ -60,7 +56,6 @@ void Menu::game_event(){
          sf::FloatRect visibleArea(0, 0, 800, 600);
          //m_background.setSize({static_cast<unsigned int>(x),static_cast<unsigned int>(y)});
          m_window.setView(sf::View(visibleArea));
-         //std::cout<<x<<" "<<y<<std::endl;
       }
       if (ev.type == sf::Event::Closed)
          m_window.close();
@@ -76,8 +71,5 @@ void Menu::game_event(){
    
 }
 void Menu::draw(){
-   // to_draw.back()->setSize({m_window.getSize().x/13,m_window.getSize().y/2});
-   for(const auto &thing: to_draw){
-      thing->draw(m_window, sf::RenderStates::Default);
-   }
+   // TODO: draw menu, selecting game
 }

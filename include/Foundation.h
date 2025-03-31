@@ -5,8 +5,11 @@
 #include "Tile.h"
 class Foundation : public Depot{
    private:
-   bool autocollect=false;
-   Tile foundationCard;
+   /// @brief determine if card are collected automatically
+   //like in Spider Solitaire
+   bool m_autocollect=false;
+   /// @brief back tile to foundation
+   Tile m_foundationCard;
 protected:
 public:
    Foundation(sf::Vector2f position);

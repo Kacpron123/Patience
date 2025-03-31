@@ -9,8 +9,8 @@
 class Tableau: public Depot{
 private:
    /// @brief true if can place any kard else only King
-   bool _placeableAny;
-   Tile baseTile;
+   bool m_placeableAny;
+   Tile m_baseTile;
 public:
    Tableau(sf::Vector2f position,sf::Vector2f size);
    ~Tableau() override = default;
