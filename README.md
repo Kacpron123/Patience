@@ -1,6 +1,6 @@
 # Solitaire game created with C++ and SFML
 
-This is a simple implementation of Solitaire card game using C++ and SFML library.
+This is a simple implementation of Solitaire card game using C++ and SFML library.  
 
 ## Compiling
 If you don't have installed SFML library first run  
@@ -19,6 +19,7 @@ make
 
   
 ## Features to implement
+The code is designed with modularity and scalability in mind, making it easy to implement new features
 * choosing type of solitaire to play
 * saving/loading settings and last played game
 * fully customize look of game
