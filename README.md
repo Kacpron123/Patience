@@ -2,7 +2,7 @@
 
 This is a simple implementation of Solitaire card game using C++ and SFML library.
 
-## Features
+## Features to implement
 * choosing type of solitaire to play
 * saving/loading settings and last played game
 * fully customize look of game
