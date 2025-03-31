@@ -36,7 +36,7 @@ int Menu::start(){
       m_window.draw(m_background);
       level.draw(m_window, sf::RenderStates::Default);
       // this->draw();
-      MenuOptions::draw(m_window);
+      // MenuOptions::draw(m_window);
       m_window.display();
       sf::sleep(sf::milliseconds(20));
    }

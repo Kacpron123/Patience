@@ -73,10 +73,10 @@ void Level::cleanLevel(){
     m_cards.clear();
 }
 void Level::levelEvent(sf::Vector2i mousePos){
-    if(mousePos.x>=0&&mousePos.x<=80&&mousePos.y>=0&&mousePos.y<=80){
-        resetLevel();
-        return;
-    }
+    // if(mousePos.x>=0&&mousePos.x<=80&&mousePos.y>=0&&mousePos.y<=80){
+    //     resetLevel();
+    //     return;
+    // }
     Hand &hand = Hand::getInstance();
     for(auto &depot : m_depots){
         int cardclicked=0;
