@@ -76,13 +76,13 @@ Card& Depot::operator[](int j) const{
 void Depot::createDepot(std::vector<std::unique_ptr<Card>> &pack){
    Depot::fillDepot(pack);
 }   
-void Depot::piletopile(Depot *sender,int num,Depot *receiver){
+void Depot::piletopile(Depot *sender,int num,Depot *receiver,bool brute){
    if(!sender || !receiver)
       return;
    for(int i=num;i<sender->size();i++)
       (*sender)[i].deselect();
    //accepting the move
-   if(!(sender->piletohand() && receiver->handtopile()))
+   if(!brute && !(sender->piletohand() && receiver->handtopile()))
       return;
    // moving
    std::vector<std::unique_ptr<Card>> pack(std::make_move_iterator(sender->_pile.begin()+num),std::make_move_iterator(sender->_pile.end()));
@@ -91,4 +91,5 @@ void Depot::piletopile(Depot *sender,int num,Depot *receiver){
    //updating
    sender->updatesender();
    receiver->updatereceiver();
+   // TODO deselect hand?
 }

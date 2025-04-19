@@ -13,7 +13,6 @@ private:
    sf::IntRect m_cardrect;
    static sf::Texture m_frontside;
    static sf::Texture m_backside;
-protected:
    /// @brief rank of card in order: A,1,2,3,4,5,6,7,8,9,10,J,Q,K
    const Rank _rank;
    /// @brief suit of card: hearts,diamonds,clubs,spades
@@ -21,6 +20,7 @@ protected:
    /// @brief side of card false mean face-down
    bool _headup;
 public:
+   static sf::Vector2f size;
    Card(int rank,int suit,bool headup=true);
    ~Card()=default;
    /// @brief reverse side of card
@@ -35,7 +35,6 @@ public:
    
    /// @brief opeartor for printing
    friend std::ostream& operator<<(std::ostream& os, const Card& card);
-   void print() const;
 
    void updateTexture(bool resetRect=true);
    /// @brief load front and back textures

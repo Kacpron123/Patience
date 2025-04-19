@@ -7,8 +7,8 @@
 #include <algorithm>
 #include <random>
 
-int Level::m_difficulty;
-int Level::m_placingtype;
+Level::flags Level::s_flags;
+Level* Level::instance=nullptr;
 void Level::shuffle(){
     std::random_device rd;
     std::mt19937 g(rd());
@@ -19,39 +19,108 @@ void Level::draw(sf::RenderTarget &target, sf::RenderStates states) const{
         ptr->draw(target,states);
 }
 Level::Level(){
+    flags f{1,1};
+    setFlags(f);
 }
 Level::~Level(){
     cleanLevel();
 }
+
+void Level::flags::autocollect(Level& level){
+    for(auto &depot:level.m_depots){
+        Tableau* tableau=dynamic_cast<Tableau*>(depot.get());
+        if(tableau){
+            int s=tableau->size();
+            if(s>=13){
+                Foundation* foundation=nullptr;
+                for(auto &depot2:level.m_depots){
+                    foundation=dynamic_cast<Foundation*>(depot2.get());
+                    if(foundation)
+                        break;
+                }
+                //check if can move
+                for(int i=0;i<12;i++){
+                    if((*tableau)[s-i]<<(*tableau)[s-i-1])
+                        return;
+                }
+                if(!tableau->correctPack(s-13))
+                    continue;
+                std::cout<<"autocomplete\n";
+                Hand &hand=Hand::getInstance();
+                for(int i=1;i<=13;i++){
+                    hand.selectDepot(tableau,s-i);
+                    Depot::piletopile(tableau,s-i,foundation);
+                }
+                break;
+            }
+            }
+        }
+}
+
 void Level::loadLevel(std::string &&levelpath){
-    m_difficulty=3;
-    m_placingtype=3;
+    int start=0;
+    // //Klondike hard coded
+    // flags &f=getFlags();
+    // f.m_difficulty=3;
+    // f.m_placingtype=3;
+    // Tableau::setanyplaceable(false);
+    // srand(time(NULL));
+    // for(int i=3;i>=0;i--){
+    //     for(int j=12;j>=0;j--){
+    //         m_cards.push_back(new Card(Card::Rank(j),Card::Suit(i)));
+    //         m_cards.back()->setSize(80,120);
+    //     }
+    // }
+    // shuffle();
+    // for(int i=0;i<7;i++){
+    //     m_depots.push_back(std::make_unique<Tableau>(sf::Vector2f(60+i*100,200),sf::Vector2f(0,20)));
+    //     std::vector<std::unique_ptr<Card>> pack(
+    //         std::make_move_iterator(m_cards.begin()+start),
+    //         std::make_move_iterator(m_cards.begin()+start+i+1));
+    //         // m_cards.erase(m_cards.begin(),m_cards.begin()+start+i+1);
+    //         m_depots.back()->createDepot(pack);
+    //         start+=i+1;
+    //     }
+    // m_depots.push_back(std::make_unique<Stock>(sf::Vector2f(660,60)));
+    // std::vector<std::unique_ptr<Card>> pack(
+    //     std::make_move_iterator(m_cards.begin()+start),
+    //     std::make_move_iterator(m_cards.end())); 
+    // // m_cards.clear();
+    // m_depots.back()->createDepot(pack);
+    // for(int i=0;i<4;i++){
+    //     m_depots.push_back(std::make_unique<Foundation>(sf::Vector2f(60+i*100,60)));
+    // }
+
+    //Solitaire Spider hard coded
+    flags &f=getFlags();
+    f.m_difficulty=1;
+    f.m_placingtype=1;
+    f.s_autocollect=true;
+    f.s_stockdeal=true;
     srand(time(NULL));
-    //Klondike hard coded
-    for(int i=3;i>=0;i--){
-        for(int j=12;j>=0;j--){
+    for(int w=2;w--;)
+    for(int i=0;i<4;i++){
+        for(int j=0;j<13;j++){
             m_cards.push_back(new Card(Card::Rank(j),Card::Suit(i)));
             m_cards.back()->setSize(80,120);
         }
     }
     shuffle();
-    for(int i=0;i<7;i++){
-        m_depots.push_back(std::make_unique<Tableau>(sf::Vector2f(60+i*100,200),sf::Vector2f(0,20)));
+    for(int i=0;i<10;i++){
+        m_depots.push_back(std::make_unique<Tableau>(sf::Vector2f(10+i*100,100),sf::Vector2f(0,20)));
         std::vector<std::unique_ptr<Card>> pack(
-            std::make_move_iterator(m_cards.begin()),
-            std::make_move_iterator(m_cards.begin()+i+1));
-            m_cards.erase(m_cards.begin(),m_cards.begin()+i+1);
+            std::make_move_iterator(m_cards.begin()+start),
+            std::make_move_iterator(m_cards.begin()+start+5+(i<4)));
+            m_cards.erase(m_cards.begin(),m_cards.begin()+start+5+(i<4));
             m_depots.back()->createDepot(pack);
         }
-    m_depots.push_back(std::make_unique<Stock>(sf::Vector2f(660,60)));
+    m_depots.push_back(std::make_unique<Stock>(sf::Vector2f(710,360)));
     std::vector<std::unique_ptr<Card>> pack(
-        std::make_move_iterator(m_cards.begin()),
+        std::make_move_iterator(m_cards.begin()+start),
         std::make_move_iterator(m_cards.end())); 
-        m_cards.clear();
-        m_depots.back()->createDepot(pack);
-    for(int i=0;i<4;i++){
-        m_depots.push_back(std::make_unique<Foundation>(sf::Vector2f(60+i*100,60)));
-    }
+    m_depots.back()->createDepot(pack);
+    
+    //m_cards.clear();
 
 }
 void Level::resetLevel(){
@@ -65,11 +134,6 @@ void Level::cleanLevel(){
         depot->clearDepot();
     }
     m_depots.clear();
-
-    for (Card* card : m_cards) {
-        delete card;
-        card = nullptr;
-    }
     m_cards.clear();
 }
 void Level::levelEvent(sf::Vector2i mousePos){
@@ -78,6 +142,13 @@ void Level::levelEvent(sf::Vector2i mousePos){
         return;
     }
     Hand &hand = Hand::getInstance();
+    if(mousePos.x<20 && mousePos.y<20){
+
+        std::cout<<"resize\n";
+        for(Card* card: m_cards){
+            card->setSize(40,60);
+        }
+    }
     for(auto &depot : m_depots){
         int cardclicked=0;
         if((cardclicked=depot->clicked(mousePos))>=-1){
@@ -96,6 +167,10 @@ void Level::levelEvent(sf::Vector2i mousePos){
                 else{
                     if(cardclicked==depot->size()-1 && &hand.getSender()!= depot.get()){
                         Depot::piletopile(&hand.getSender(),hand.getPlace(),depot.get());
+                        hand.deselectDepot();
+                        if(s_flags.s_autocollect){
+                            s_flags.autocollect(*this);
+                        }
                     }
                     hand.deselectDepot();
                 }

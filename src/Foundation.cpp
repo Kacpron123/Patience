@@ -1,17 +1,23 @@
 #include "Foundation.h"
 #include "Hand.h"
+#include "Level.h"
 
 Foundation::Foundation(sf::Vector2f position): Depot(position,{0,0}){
    m_foundationCard.setTexture("resources/card_foundation.png");
    m_foundationCard.setSize(80,120);
    m_foundationCard.setPosition(getPosition().x,getPosition().y);
+   m_autocollect=Level::getFlags().s_autocollect;
 }
 void Foundation::draw(sf::RenderTarget &target,sf::RenderStates states) const{
+   if(m_autocollect)
+      return;
    m_foundationCard.draw(target,states);
    if(!empty())
       _pile.back()->draw(target,states);
 }
 int Foundation::clicked(const sf::Vector2i &mousePos){
+   if(m_autocollect)
+      return -2;
    sf::Vector2f rightdowncornerofbase=m_foundationCard.getPosition()+static_cast<sf::Vector2f>(m_foundationCard.getSize());
    if(mousePos.x>=m_foundationCard.getPosition().x && mousePos.x<=rightdowncornerofbase.x  && mousePos.y>=m_foundationCard.getPosition().y && mousePos.y<=rightdowncornerofbase.y){
       if(empty())
@@ -43,12 +49,6 @@ bool Foundation::handtopile(){
          return true;
    }
    return false;
-}
-void Foundation::updatereceiver(){
-   // actually not needed
-}
-void Foundation::updatesender(){
-   // actually not needed
 }
 
  

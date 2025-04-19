@@ -16,6 +16,7 @@ private:
    sf::Vector2f m_wasteposition;
    /// @brief defining if cards are auto collecting from Tableau 
    bool m_autocollect();
+   bool drawtile=false;
    // int drawedCard;
    void rotate();
 public:
@@ -26,7 +27,6 @@ public:
    void createDepot(std::vector<std::unique_ptr<Card>> &pack) override;
    bool piletohand() override;
    bool handtopile() override;
-   // void update() override{Depot::update();std::cout<<"update stock"<<std::endl;};
    void updatesender() override;
    void updatereceiver() override;
 

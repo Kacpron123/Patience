@@ -4,20 +4,34 @@
 #include <memory>
 #include <string>
 #include "Depot.h"
+#include "Card.h"
+
 class Level{
 private:
+    static Level* instance;
+    Level();
     std::string m_levelpath;
     // Hand hand;
     /// @brief vector of cards in game
     /// used in drawing and scaling
     std::vector<Card*> m_cards;
     std::vector<std::shared_ptr<Depot>> m_depots; 
-    /// @brief which depot can be moved
-    static int m_difficulty;
-    /// @brief which type of card can be placed one on another
-    static int m_placingtype;
+    struct flags{
+        /// @brief which depot can be moved
+        int m_difficulty;
+        /// @brief which type of card can be placed one on another
+        int m_placingtype;
+        bool s_autocollect=false;
+        void autocollect(Level& level);
+        bool s_stockdeal=false;
+    };
+    static flags s_flags;
 public:
-    Level();
+    static Level& getInstance(){
+        if(!instance)
+            instance = new Level();
+        return *instance;
+    }
     ~Level();
     /// @brief load level
     /// @param levelpath name of level file 
@@ -36,6 +50,9 @@ public:
     void scale(float x,float y);
     /// @brief handle level events
     void levelEvent(sf::Vector2i mousePos);
-    friend class Card;
+    void setFlags(flags flag){s_flags=flag;};
+    static flags& getFlags(){return s_flags;}
+    friend class Stock;
 };
 #endif
+

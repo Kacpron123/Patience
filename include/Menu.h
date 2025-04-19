@@ -14,7 +14,7 @@
 
 class Menu: public MenuOptions{
 private:
-   Level level;
+   Level& level = Level::getInstance();
    /// @brief window
    sf::RenderWindow m_window{};
    /// @brief app icon

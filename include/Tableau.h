@@ -9,7 +9,7 @@
 class Tableau: public Depot{
 private:
    /// @brief true if can place any kard else only King
-   bool m_placeableAny;
+   static bool m_placeableAny;
    Tile m_baseTile;
 public:
    Tableau(sf::Vector2f position,sf::Vector2f size);
@@ -20,6 +20,7 @@ public:
    bool piletohand() override;
    bool handtopile() override;
    void createDepot(std::vector<std::unique_ptr<Card>> &pack) override;
+   static void setanyplaceable(bool s){m_placeableAny=s;}
    void updatereceiver() override;
    void updatesender() override;
 };

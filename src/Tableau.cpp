@@ -1,6 +1,8 @@
 #include "Tableau.h"
 #include "Level.h"
 #include "Hand.h"
+
+bool Tableau::m_placeableAny = false;
 Tableau::Tableau(sf::Vector2f position,sf::Vector2f dposition):Depot(position,dposition){
    m_baseTile.setTexture("resources/card_blank.png");
    m_baseTile.setSize(80,120);
@@ -32,16 +34,14 @@ void Tableau::createDepot(std::vector<std::unique_ptr<Card>> &pack){
 }
 bool Tableau::piletohand(){
    return true;
-   Card &topcard = (*this)[size()-1];
-   if(!topcard.getHeadup())
-      topcard.reverse();
 }
 bool Tableau::handtopile(){
    if(empty()){
       const Card& tophand=Hand::getInstance().getSender()[Hand::getInstance().getPlace()]; 
-      if(tophand.getRank()==Card::King)
+      if(m_placeableAny)
          return true;
-      return false;
+      else 
+         return tophand.getRank()==Card::King;
    }
    if((Hand::getInstance().getSender())[Hand::getInstance().getPlace()]>(*this)[size()-1])
       return true;
