@@ -16,6 +16,10 @@ private:
     /// used in drawing and scaling
     std::vector<Card*> m_cards;
     std::vector<std::shared_ptr<Depot>> m_depots; 
+    std::vector<std::shared_ptr<Depot>> m_tableau; 
+    std::vector<std::shared_ptr<Depot>> m_foundation; 
+    std::shared_ptr<Depot> m_stock; 
+
     struct flags{
         /// @brief which depot can be moved
         int m_difficulty;
@@ -24,6 +28,7 @@ private:
         bool s_autocollect=false;
         void autocollect(Level& level);
         bool s_stockdeal=false;
+        bool tableauplaceany = false;
     };
     static flags s_flags;
 public:
@@ -52,7 +57,9 @@ public:
     void levelEvent(sf::Vector2i mousePos);
     void setFlags(flags flag){s_flags=flag;};
     static flags& getFlags(){return s_flags;}
+    std::vector<Card*> &getCards(){return m_cards;}
     friend class Stock;
+    friend class Tableau;
 };
 #endif
 

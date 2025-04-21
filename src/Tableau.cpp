@@ -2,10 +2,9 @@
 #include "Level.h"
 #include "Hand.h"
 
-bool Tableau::m_placeableAny = false;
 Tableau::Tableau(sf::Vector2f position,sf::Vector2f dposition):Depot(position,dposition){
    m_baseTile.setTexture("resources/card_blank.png");
-   m_baseTile.setSize(80,120);
+   m_baseTile.setSize(Card::defaultsize.x,Card::defaultsize.y);
    m_baseTile.setPosition(getPosition().x,getPosition().y);
 }
 void Tableau::draw(sf::RenderTarget &target, sf::RenderStates states) const{
@@ -37,17 +36,31 @@ bool Tableau::piletohand(){
 }
 bool Tableau::handtopile(){
    if(empty()){
-      const Card& tophand=Hand::getInstance().getSender()[Hand::getInstance().getPlace()]; 
-      if(m_placeableAny)
+      if(Level::getFlags().tableauplaceany)
          return true;
-      else 
-         return tophand.getRank()==Card::King;
+      const Card& tophand=Hand::getInstance().getSender()[Hand::getInstance().getPlace()];
+      return tophand.getRank()==Card::King;
    }
    if((Hand::getInstance().getSender())[Hand::getInstance().getPlace()]>(*this)[size()-1])
       return true;
    return false;
 }
 void Tableau::updatereceiver(){
+   if(Level::getFlags().s_autocollect){
+      int s=size();
+      if(s>=13 && _pile[s-13]->getHeadup() && correctPack(s-13)){
+         std::shared_ptr<Depot> foundation=nullptr;
+         for(auto &f:Level::getInstance().m_foundation){
+            if(f && f->empty()){
+               foundation=f;
+               break;
+            }
+         }
+         Hand &hand=Hand::getInstance();
+         hand.selectDepot(this,s-13);
+         Depot::piletopile(this,s-13,foundation.get(),true);
+      }   
+   }
    // TODO : update receiver, add resize     
 }
 void Tableau::updatesender(){

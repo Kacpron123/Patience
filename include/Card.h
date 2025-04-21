@@ -20,7 +20,7 @@ private:
    /// @brief side of card false mean face-down
    bool _headup;
 public:
-   static sf::Vector2f size;
+   static sf::Vector2f defaultsize;
    Card(int rank,int suit,bool headup=true);
    ~Card()=default;
    /// @brief reverse side of card
@@ -39,9 +39,15 @@ public:
    void updateTexture(bool resetRect=true);
    /// @brief load front and back textures
    static void loadTexture();
-   /// @brief getters 
+   static void changedefaultsize(sf::Vector2i size);
+
+   // setters
+   static void setdefaultSize(sf::Vector2f size);
+   // getters 
+   sf::Vector2f getSize() const{return defaultsize;}
    inline Rank getRank() const{return _rank;}
    inline Suit getSuit() const{return _suit;}
+   /// @brief determine if card is facing up 
    inline bool getHeadup() const{return _headup;}
 };
 #endif

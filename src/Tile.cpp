@@ -1,13 +1,5 @@
 #include "Tile.h"
 
-Tile::Tile(const std::string &path){
-   setTexture(path);
-   setSize(m_texture.getSize().x,m_texture.getSize().y);
-}
-Tile::Tile(const std::string &path,sf::Vector2u given_size){
-   setTexture(path);
-   setSize(given_size.x,given_size.y);
-}
 void Tile::draw(sf::RenderTarget &target, sf::RenderStates states) const{
    target.draw(m_sprite, states);
 }

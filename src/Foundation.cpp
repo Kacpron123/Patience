@@ -9,8 +9,12 @@ Foundation::Foundation(sf::Vector2f position): Depot(position,{0,0}){
    m_autocollect=Level::getFlags().s_autocollect;
 }
 void Foundation::draw(sf::RenderTarget &target,sf::RenderStates states) const{
-   if(m_autocollect)
+   if(m_autocollect){
+      if(empty())
+         return;
+      _pile[0]->draw(target,states);
       return;
+   }
    m_foundationCard.draw(target,states);
    if(!empty())
       _pile.back()->draw(target,states);
@@ -31,7 +35,7 @@ void Foundation::scale(float x,float y){
    Depot::scale(x,y);
 }
 bool Foundation::piletohand(){
-   return true;
+   return !m_autocollect;
 }
 bool Foundation::handtopile(){
    Hand &hand=Hand::getInstance();

@@ -11,9 +11,6 @@ private:
 public:
    /// @brief default constructor
    Tile() = default;
-   Tile(const std::string &path);
-   Tile(const Tile &other,sf::Vector2u size);
-   Tile(const std::string &path,sf::Vector2u size);
    ~Tile() override = default;
    Tile& operator=(const Tile &other); 
    /// @brief check if tile is clicked

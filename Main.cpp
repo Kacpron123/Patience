@@ -3,7 +3,7 @@
 int main()
 {
     try {
-        Menu app;
+        Menu &app=Menu::getInstance();
         return app.start();
     }
     catch (...) {

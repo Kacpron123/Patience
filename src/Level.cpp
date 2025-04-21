@@ -26,38 +26,10 @@ Level::~Level(){
     cleanLevel();
 }
 
-void Level::flags::autocollect(Level& level){
-    for(auto &depot:level.m_depots){
-        Tableau* tableau=dynamic_cast<Tableau*>(depot.get());
-        if(tableau){
-            int s=tableau->size();
-            if(s>=13){
-                Foundation* foundation=nullptr;
-                for(auto &depot2:level.m_depots){
-                    foundation=dynamic_cast<Foundation*>(depot2.get());
-                    if(foundation)
-                        break;
-                }
-                //check if can move
-                for(int i=0;i<12;i++){
-                    if((*tableau)[s-i]<<(*tableau)[s-i-1])
-                        return;
-                }
-                if(!tableau->correctPack(s-13))
-                    continue;
-                std::cout<<"autocomplete\n";
-                Hand &hand=Hand::getInstance();
-                for(int i=1;i<=13;i++){
-                    hand.selectDepot(tableau,s-i);
-                    Depot::piletopile(tableau,s-i,foundation);
-                }
-                break;
-            }
-            }
-        }
-}
 
 void Level::loadLevel(std::string &&levelpath){
+    
+    Card::setdefaultSize({60,90});
     int start=0;
     // //Klondike hard coded
     // flags &f=getFlags();
@@ -93,33 +65,50 @@ void Level::loadLevel(std::string &&levelpath){
 
     //Solitaire Spider hard coded
     flags &f=getFlags();
-    f.m_difficulty=1;
     f.m_placingtype=1;
     f.s_autocollect=true;
     f.s_stockdeal=true;
+    f.tableauplaceany=true;
     srand(time(NULL));
     for(int w=2;w--;)
-    for(int i=0;i<4;i++){
-        for(int j=0;j<13;j++){
-            m_cards.push_back(new Card(Card::Rank(j),Card::Suit(i)));
-            m_cards.back()->setSize(80,120);
-        }
-    }
+    // //simple (one color)
+    // f.m_difficulty=1;
+    // for(int i=0;i<4;i++)
+    //     for(int j=0;j<13;j++)
+    //         m_cards.push_back(new Card(Card::Rank(j),Card::Suit::Clubs));
+    // //two colors
+    for(int i=0;i<4;i++)
+        for(int j=0;j<13;j++)
+            m_cards.push_back(new Card(Card::Rank(j),i%2));
+    f.m_difficulty=2;
+
+    // //four colors
+    // for(int i=0;i<4;i++)
+    //     for(int j=0;j<13;j++)
+    //         m_cards.push_back(new Card(Card::Rank(j),i));
     shuffle();
     for(int i=0;i<10;i++){
-        m_depots.push_back(std::make_unique<Tableau>(sf::Vector2f(10+i*100,100),sf::Vector2f(0,20)));
+        auto tableau = std::make_shared<Tableau> (sf::Vector2f(10+i*80,100),sf::Vector2f(0,20));
         std::vector<std::unique_ptr<Card>> pack(
             std::make_move_iterator(m_cards.begin()+start),
             std::make_move_iterator(m_cards.begin()+start+5+(i<4)));
-            m_cards.erase(m_cards.begin(),m_cards.begin()+start+5+(i<4));
-            m_depots.back()->createDepot(pack);
+            // m_cards.erase(m_cards.begin(),m_cards.begin()+start+5+(i<4));
+            tableau->createDepot(pack);
+            start+=5+(i<4);
+            m_depots.push_back(tableau);
+            m_tableau.push_back(tableau);
         }
-    m_depots.push_back(std::make_unique<Stock>(sf::Vector2f(710,360)));
+    m_depots.push_back(std::make_shared<Stock>(sf::Vector2f(710,450)));
     std::vector<std::unique_ptr<Card>> pack(
         std::make_move_iterator(m_cards.begin()+start),
         std::make_move_iterator(m_cards.end())); 
     m_depots.back()->createDepot(pack);
-    
+
+    for(int i=0;i<8;i++){
+        auto foundation=std::make_shared<Foundation>(sf::Vector2f(10+10*i,450));
+        m_depots.push_back(foundation);
+        m_foundation.push_back(foundation);
+    }
     //m_cards.clear();
 
 }
@@ -142,13 +131,13 @@ void Level::levelEvent(sf::Vector2i mousePos){
         return;
     }
     Hand &hand = Hand::getInstance();
-    if(mousePos.x<20 && mousePos.y<20){
+    // if(mousePos.x<20 && mousePos.y<20){
 
-        std::cout<<"resize\n";
-        for(Card* card: m_cards){
-            card->setSize(40,60);
-        }
-    }
+    //     std::cout<<"resize\n";
+    //     for(Card* card: m_cards){
+    //         card->setSize(40,60);
+    //     }
+    // }
     for(auto &depot : m_depots){
         int cardclicked=0;
         if((cardclicked=depot->clicked(mousePos))>=-1){
@@ -165,13 +154,8 @@ void Level::levelEvent(sf::Vector2i mousePos){
                     
                 }
                 else{
-                    if(cardclicked==depot->size()-1 && &hand.getSender()!= depot.get()){
+                    if(cardclicked==depot->size()-1 && &hand.getSender()!= depot.get())
                         Depot::piletopile(&hand.getSender(),hand.getPlace(),depot.get());
-                        hand.deselectDepot();
-                        if(s_flags.s_autocollect){
-                            s_flags.autocollect(*this);
-                        }
-                    }
                     hand.deselectDepot();
                 }
             }

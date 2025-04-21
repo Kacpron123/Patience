@@ -2,6 +2,8 @@
 #include "Hand.h"
 #include "Level.h"
 #include "Tableau.h"
+#include "Menu.h"
+
 Stock::Stock(sf::Vector2f position): Depot(position,{0,0}), m_bigrotate(0){
    m_wasteposition={position.x-100,position.y};
    m_baseTile.setTexture("resources/card_blank.png");
@@ -14,8 +16,8 @@ void Stock::createDepot(std::vector<std::unique_ptr<Card>> &pack){
    m_bigrotate=size()-1;
    for(int i=0;i<size();i++){
       _pile[i]->reverse();
-
-   }   
+   }
+   //TODO make drawing only 10 cards
 }
 void Stock::draw(sf::RenderTarget & target,sf::RenderStates states) const{
    if(drawtile)
@@ -25,25 +27,34 @@ void Stock::draw(sf::RenderTarget & target,sf::RenderStates states) const{
 int Stock::clicked(const sf::Vector2i &mousePos){
    if(!empty()){
       sf::Vector2f rightdowncornerofbase=_pile[0]->getSize();
+      //stock auto dealing
       if(Level::getFlags().s_stockdeal){
          if(!(mousePos.x >= m_position.x && mousePos.x <= m_position.x + rightdowncornerofbase.x && mousePos.y >= m_position.y && mousePos.y <= m_position.y + rightdowncornerofbase.y))
             return -2;
-         Hand::getInstance().deselectDepot();
+         Depot &sender=Hand::getInstance().getSender();
+         if(&sender){
+            Hand::getInstance().deselectDepot();
+            sender.draw(Menu::getWindow(),sf::RenderStates::Default);
+            Menu::getWindow().display();
+         }
          std::vector<Tableau*> tableaus;
          for(auto &depot: Level::getInstance().m_depots){
             Tableau* tableau=dynamic_cast<Tableau*>(depot.get());
             if(tableau)
                tableaus.push_back(tableau);
          }
-         int n=tableaus.size();
+         int n=std::min(tableaus.size(),size());
          Hand &hand=Hand::getInstance();
          for(int i=0;i<n;i++){
             hand.selectDepot(this,size()-1);
             _pile[size()-1]->reverse();
             Depot::piletopile(this,size()-1,tableaus[i],true);
-            // TODO make sleep
-            //TODO need indepented things-draw
+            (*tableaus[i])[tableaus[i]->size()-1].draw(Menu::getWindow(),sf::RenderStates::Default);
+            sf::sleep(sf::milliseconds(60));
+            Menu::getWindow().display();
+            //TODO making Menu::draw
          }
+
          return -2;
       }
       if(mousePos.x>=m_wasteposition.x && mousePos.x<=m_wasteposition.x+rightdowncornerofbase.x  && mousePos.y>=m_wasteposition.y && mousePos.y<=m_wasteposition.y+rightdowncornerofbase.y)

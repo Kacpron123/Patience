@@ -4,8 +4,9 @@
 
 sf::Texture Card::m_frontside;
 sf::Texture Card::m_backside;
-sf::Vector2f Card::size={80,120};
-Card::Card(int rank, int suit,bool headup): _rank(static_cast<Card::Rank>(rank)), _suit(static_cast<Card::Suit>(suit)),_headup(headup),Tile("",{135,189}){
+// sf::Vector2i Card::defaultsize={135,185};
+sf::Vector2f Card::defaultsize={80,120};
+Card::Card(int rank, int suit,bool headup): _rank(static_cast<Card::Rank>(rank)), _suit(static_cast<Card::Suit>(suit)),_headup(headup){
    if(rank<0||rank>12)
       throw std::invalid_argument("Rank must be between 0 and 12");
    if(suit<0||suit>3)
@@ -13,7 +14,7 @@ Card::Card(int rank, int suit,bool headup): _rank(static_cast<Card::Rank>(rank))
    updateTexture();
    if(_headup)
       setRect(m_cardrect);
-   setSize(135,185);
+   Tile::setSize(defaultsize.x,defaultsize.y);
 }
 bool Card::operator<<(const Card& other) const{
    if(_rank-other._rank!=1)
@@ -58,7 +59,7 @@ void Card::reverse(){
    _headup^=1;
    setTexture((_headup) ? m_frontside : m_backside);
    updateTexture();
-   setSize(currentsize.x,currentsize.y);
+   Tile::setSize(currentsize.x,currentsize.y);
 }
 
 void Card::updateTexture(bool resetRect){
@@ -82,4 +83,10 @@ std::ostream& operator<<(std::ostream& os, const Card& card){
    char rank[13]={'A','2','3','4','5','6','7','8','9','T','J','Q','K'};
    os<<suit[card._suit]<<" "<<rank[card._rank];
    return os;
+}
+void Card::setdefaultSize(sf::Vector2f size){
+   defaultsize=size;
+   for(auto &card:Level::getInstance().getCards()){
+      card->setSize(size.x,size.y);
+   }
 }

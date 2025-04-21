@@ -10,8 +10,6 @@ class Foundation : public Depot{
    bool m_autocollect=false;
    /// @brief back tile to foundation
    Tile m_foundationCard;
-   /// @brief if autocollecting is on then special drawing
-   bool m_needdraw=false;
 protected:
 public:
    Foundation(sf::Vector2f position);
